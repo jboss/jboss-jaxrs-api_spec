@@ -7,17 +7,17 @@
   <parent>
     <groupId>org.jboss</groupId>
     <artifactId>jboss-parent</artifactId>
-    <version>8</version>
+    <version>9</version>
   </parent>
 
   <groupId>org.jboss.spec.javax.ws.rs</groupId>
   <artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1.Final-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>JAX-RS 1.1 API</name>
-  <description>The Java API for RESTful Web Services</description>
-  
+  <name>The Java(TM) API for RESTful Web Services (JAX-RS) 1.1</name>
+  <description>JSR 311: The Java(TM) API for RESTful Web Services (JAX-RS) 1.1</description>
+
   <licenses>
     <license>
       <name>lgpl</name>
@@ -31,5 +31,5 @@
     <developerConnection>scm:git:git@github.com:jboss/jboss-jaxrs-api_spec.git</developerConnection>
     <url>https://github.com/jboss/jboss-jaxrs-api_spec</url>
   </scm>
-  
+
 </project>
