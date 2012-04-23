@@ -20,8 +20,8 @@
 
   <licenses>
     <license>
-      <name>lgpl</name>
-      <url>http://repository.jboss.org/licenses/lgpl-2.1.txt</url>
+      <name>CDDL</name>
+      <url>http://www.opensource.org/licenses/cddl1.php</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
