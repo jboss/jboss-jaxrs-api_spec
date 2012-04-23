@@ -11,7 +11,7 @@
 
   <groupId>org.jboss.spec.javax.ws.rs</groupId>
   <artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
-  <version>1.0.1.Final</version>
+  <version>1.0.2.Final-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>The Java(TM) API for RESTful Web Services (JAX-RS) 1.1</name>
