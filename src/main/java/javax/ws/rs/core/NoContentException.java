@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2010-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,50 +37,54 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.ws.rs;
+package javax.ws.rs.core;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.io.IOException;
 
 /**
- * Defines the media type(s) that the methods of a resource class or
- * {@link javax.ws.rs.ext.MessageBodyWriter} can produce.
- * If not specified then a container will assume that any type can be produced.
- * Method level annotations override a class level annotation. A container
- * is responsible for ensuring that the method invoked is capable of producing
- * one of the media types requested in the HTTP request. If no such method is
- * available the container must respond with a HTTP "406 Not Acceptable" as
- * specified by RFC 2616.
+ * An I/O exception thrown by {@link javax.ws.rs.ext.MessageBodyReader} implementations
+ * when reading a zero-length message content to indicate that the message body reader
+ * is not able to produce an instance representing an zero-length message content.
+ * <p>
+ * This exception, when thrown while reading a server request entity, is automatically
+ * translated by JAX-RS server runtime into a {@link javax.ws.rs.BadRequestException}
+ * wrapping the original {@code NoContentException} and rethrown for a standard processing by
+ * the registered {@link javax.ws.rs.ext.ExceptionMapper exception mappers}.
+ * </p>
  *
- * <p>A method for which there is a single-valued {@code @Produces}
- * is not required to set the media type of representations that it produces:
- * the container will use the value of the {@code @Produces} when
- * sending a response.</p>
- *
- * @author Paul Sandoz
- * @author Marc Hadley
- * @see javax.ws.rs.ext.MessageBodyWriter
- * @since 1.0
+ * @author Marek Potociar (marek.potociar at oracle.com)
+ * @since 2.0
  */
-@Inherited
-@Target({ElementType.TYPE, ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface Produces {
+public class NoContentException extends IOException {
+    private static final long serialVersionUID = -3082577759787473245L;
 
     /**
-     * A list of media types. Each entry may specify a single type or consist
-     * of a comma separated list of types, with any leading or trailing white-spaces
-     * in a single type entry being ignored. For example:
-     * <pre>
-     *  {"image/jpeg, image/gif ", " image/png"}
-     * </pre>
-     * Use of the comma-separated form allows definition of a common string constant
-     * for use on multiple targets.
+     * Construct a new {@code NoContentException} instance.
+     *
+     * @param message the detail message (which is saved for later retrieval
+     *                by the {@link #getMessage()} method).
      */
-    String[] value() default "*/*";
+    public NoContentException(String message) {
+        super(message);
+    }
+
+    /**
+     * Construct a new {@code NoContentException} instance.
+     *
+     * @param message the detail message (which is saved for later retrieval
+     *                by the {@link #getMessage()} method).
+     * @param cause   the underlying cause of the exception.
+     */
+    public NoContentException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * Construct a new {@code NoContentException} instance.
+     *
+     * @param cause the underlying cause of the exception.
+     */
+    public NoContentException(Throwable cause) {
+        super(cause);
+    }
 }

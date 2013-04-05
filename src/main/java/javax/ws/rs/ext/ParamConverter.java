@@ -54,8 +54,7 @@ import javax.ws.rs.DefaultValue;
  * {@link javax.ws.rs.PathParam &#64;PathParam}, {@link javax.ws.rs.QueryParam &#64;QueryParam},
  * {@link javax.ws.rs.MatrixParam &#64;MatrixParam}, {@link javax.ws.rs.FormParam &#64;FormParam},
  * {@link javax.ws.rs.CookieParam &#64;CookieParam} and {@link javax.ws.rs.HeaderParam &#64;HeaderParam}
- * is supported as well as conversion of any parameter values passed to
- * a JAX-RS client API or {@link javax.ws.rs.core.Response.ResponseBuilder} method.
+ * is supported.
  * <p>
  * By default, when used for injection of parameter values, a selected {@code ParamConverter}
  * instance MUST be used eagerly by a JAX-RS runtime to convert any {@link DefaultValue
@@ -103,6 +102,11 @@ public interface ParamConverter<T> {
 
     /**
      * Convert the supplied value to a String.
+     * <p>
+     * This method is reserved for future use. Proprietary JAX-RS extensions may leverage the method.
+     * Users should be aware that any such support for the method comes at the expense of producing
+     * non-portable code.
+     * </p>
      *
      * @param value the value of type {@code T}.
      * @return a String representation of the value.
