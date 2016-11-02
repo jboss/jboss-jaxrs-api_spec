@@ -202,19 +202,16 @@ final class FactoryFinder {
 
         ClassLoader moduleClassLoader = getModuleClassLoader();
         if (moduleClassLoader != null) {
-           try {
-              InputStream is = moduleClassLoader.getResourceAsStream(serviceId);
-          
+           try (InputStream is = moduleClassLoader.getResourceAsStream(serviceId)) {
               if( is!=null ) {
-                  BufferedReader rd =
-                      new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                  try (BufferedReader rd = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
           
-                  String factoryClassName = rd.readLine();
-                  rd.close();
+                      String factoryClassName = rd.readLine();
 
-                  if (factoryClassName != null &&
-                      ! "".equals(factoryClassName)) {
-                      return newInstance(factoryClassName, moduleClassLoader);
+                      if (factoryClassName != null &&
+                          ! "".equals(factoryClassName)) {
+                          return newInstance(factoryClassName, moduleClassLoader);
+                      }
                   }
               }
           } catch( Exception ex ) {
