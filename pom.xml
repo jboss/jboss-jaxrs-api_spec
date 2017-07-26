@@ -10,12 +10,12 @@
   </parent>
 
   <groupId>org.jboss.spec.javax.ws.rs</groupId>
-  <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
-  <version>1.0.1.Final-SNAPSHOT</version>
+  <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+  <version>1.0.0.Alpha1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>JAX-RS 2.0: The Java(TM) API for RESTful Web Services</name>
-  <description>JSR 339: JAX-RS 2.0: The Java(TM) API for RESTful Web Services</description>
+  <name>JAX-RS 2.1: The Java(TM) API for RESTful Web Services</name>
+  <description>JSR 370: JAX-RS 2.1: The Java(TM) API for RESTful Web Services</description>
 
   <licenses>
     <license>
@@ -73,11 +73,11 @@
             </manifest>
           </archive>
           <instructions>
-            <Specification-Title>JSR 339: The Java(TM) API for RESTful Web Services</Specification-Title>
+            <Specification-Title>JSR 370: The Java(TM) API for RESTful Web Services</Specification-Title>
             <Specification-Vendor>Oracle</Specification-Vendor>
-            <Specification-Version>2.0</Specification-Version>
+            <Specification-Version>2.1</Specification-Version>
             <Export-Package>
-              javax.ws.rs*;version=2.0
+              javax.ws.rs*;version=2.1
             </Export-Package>
           </instructions>
         </configuration>
@@ -99,9 +99,9 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Specification-Title>JSR 339: The Java(TM) API for RESTful Web Services</Specification-Title>
+              <Specification-Title>JSR 370: The Java(TM) API for RESTful Web Services</Specification-Title>
               <Specification-Vendor>Oracle</Specification-Vendor>
-              <Specification-Version>2.0</Specification-Version>
+              <Specification-Version>2.1</Specification-Version>
             </manifestEntries>
           </archive>
         </configuration>

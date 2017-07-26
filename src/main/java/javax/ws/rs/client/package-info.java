@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2011-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,13 +37,14 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 /**
  * <h1>The JAX-RS client API</h1>
  *
  * The JAX-RS client API is a Java based API used to access Web resources.
  * It is not restricted to resources implemented using JAX-RS.
- * It's goal is to provide a higher-level abstraction compared to a {@link java.net.HttpURLConnection
- * plain HTTP communication API} as well as integration with the existing JAX-RS
+ * It provides a higher-level abstraction compared to a {@link java.net.HttpURLConnection
+ * plain HTTP communication API} as well as integration with the JAX-RS extension
  * providers, in order to enable concise and efficient implementation of
  * reusable client-side solutions that leverage existing and well
  * established client-side implementations of HTTP-based communication.
@@ -65,7 +66,7 @@
  *
  *   client.property("MyProperty", "MyValue")
  *         .register(MyProvider.class)
- *         .enable(MyFeature.class);
+ *         .register(MyFeature.class);
  * </pre>
  *
  * <h2>Accessing Web Resources</h2>
@@ -88,8 +89,8 @@
  *
  * As illustrated above, individual Web resources are in the JAX-RS Client API
  * represented as resource targets. Each {@code WebTarget} instance is bound to a
- * concrete URI, e.g. {@code "http://example,org/messages/123"},
- * or a URI template, e.g. {@code "http://example,org/messages/{id}"}.
+ * concrete URI, e.g. {@code "http://example.org/messages/123"},
+ * or a URI template, e.g. {@code "http://example.org/messages/{id}"}.
  * That way a single target can either point at a particular resource or represent
  * a larger group of resources (that e.g. share a common configuration) from which
  * concrete resources can be later derived:
@@ -97,8 +98,11 @@
  *   // Parent target for all messages
  *   WebTarget messages = client.target("http://example.org/messages/{id}");
  *
- *   WebTarget msg123 = messages.path("id", 123); // New target for http://example,org/messages/123
- *   WebTarget msg456 = messages.path("id", 456); // New target for http://example,org/messages/456
+ *   // New target for http://example.org/messages/123
+ *   WebTarget msg123 = messages.resolveTemplate("id", 123);
+ *
+ *   // New target for http://example.org/messages/456
+ *   WebTarget msg456 = messages.resolveTemplate("id", 456);
  * </pre>
  *
  *<h2>Generic Invocations</h2>
@@ -109,10 +113,10 @@
  * need to know how the invocation was prepared, but only whether it should be
  * executed synchronously or asynchronously.
  * <pre>
- *   Invocation inv1 = client.target("http://examples.org/atm/balance")
+ *   Invocation inv1 = client.target("http://example.org/atm/balance")
  *       .queryParam("card", "111122223333").queryParam("pin", "9876")
  *       .request("text/plain").buildGet();
- *   Invocation inv2 = client.target("http://examples.org/atm/withdrawal")
+ *   Invocation inv2 = client.target("http://example.org/atm/withdrawal")
  *       .queryParam("card", "111122223333").queryParam("pin", "9876")
  *       .request().buildPost(text("50.0")));
  *

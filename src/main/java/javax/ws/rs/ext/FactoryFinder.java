@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2010-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -44,11 +44,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -125,15 +129,15 @@ final class FactoryFinder {
         }
     }
 
+
     /**
-     * Finds the implementation {@code Class} object for the given
-     * factory name, or if that fails, finds the {@code Class} object
-     * for the given fallback class name. The arguments supplied MUST be
+     * Finds the implementation {@code Class} for the given factory name,
+     * or if that fails, finds the {@code Class} for the given fallback
+     * class name and create its instance. The arguments supplied MUST be
      * used in order. If using the first argument is successful, the second
      * one will not be used.
      * <p>
      * This method is package private so that this code can be shared.
-     * </p>
      *
      * @param factoryId         the name of the factory to find, which is
      *                          a system property.
@@ -141,37 +145,34 @@ final class FactoryFinder {
      *                          to be used only if nothing else.
      *                          is found; {@code null} to indicate that
      *                          there is no fallback class name.
-     * @return the {@code Class} object of the specified message factory;
-     *         may not be {@code null}.
-     * @throws ClassNotFoundException if there is an error.
+     * @param service           service to be found.
+     * @param <T>               type of the service to be found.
+     * @return the instance of the specified service; may not be {@code null}.
+     * @throws ClassNotFoundException if the given class could not be found
+     *                                or could not be instantiated.
      */
-    static Object find(final String factoryId, final String fallbackClassName) throws ClassNotFoundException {
+    static <T> Object find(final String factoryId, final String fallbackClassName, Class<T> service) throws ClassNotFoundException {
         ClassLoader classLoader = getContextClassLoader();
 
-        String serviceId = "META-INF/services/" + factoryId;
-        // try to find services in CLASSPATH
         try {
-            InputStream is;
-            if (classLoader == null) {
-                is = ClassLoader.getSystemResourceAsStream(serviceId);
-            } else {
-                is = classLoader.getResourceAsStream(serviceId);
+            Iterator<T> iterator = ServiceLoader.load(service, FactoryFinder.getContextClassLoader()).iterator();
+
+            if(iterator.hasNext()) {
+                return iterator.next();
             }
-
-            if (is != null) {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-
-                String factoryClassName = rd.readLine();
-                rd.close();
-
-                if (factoryClassName != null && !"".equals(factoryClassName)) {
-                    return newInstance(factoryClassName, classLoader);
-                }
-            }
-        } catch (Exception ex) {
-            LOGGER.log(Level.FINER, "Failed to load service " + factoryId + " from " + serviceId, ex);
+        } catch (Exception | ServiceConfigurationError ex) {
+            LOGGER.log(Level.FINER, "Failed to load service " + factoryId + ".", ex);
         }
 
+        try {
+            Iterator<T> iterator = ServiceLoader.load(service, FactoryFinder.class.getClassLoader()).iterator();
+
+            if(iterator.hasNext()) {
+                return iterator.next();
+            }
+        } catch (Exception | ServiceConfigurationError ex) {
+            LOGGER.log(Level.FINER, "Failed to load service " + factoryId + ".", ex);
+        }
 
         // try to read from $java.home/lib/jaxrs.properties
         try {
@@ -204,6 +205,7 @@ final class FactoryFinder {
 
         ClassLoader moduleClassLoader = getModuleClassLoader();
         if (moduleClassLoader != null) {
+           String serviceId = "META-INF/services/" + factoryId;
            try (InputStream is = moduleClassLoader.getResourceAsStream(serviceId)) {
               if( is!=null ) {
                   try (BufferedReader rd = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {

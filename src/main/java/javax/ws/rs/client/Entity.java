@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2011-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,9 +37,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 package javax.ws.rs.client;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.Locale;
 
 import javax.ws.rs.core.Form;
@@ -205,11 +207,11 @@ public final class Entity<T> {
     }
 
     private Entity(final T entity, final MediaType mediaType) {
-        this(entity, new Variant(mediaType, (Locale) null, null), EMPTY_ANNOTATIONS);
+        this(entity, new Variant(mediaType, (Locale) null, null), null);
     }
 
     private Entity(final T entity, final Variant variant) {
-        this(entity, variant, EMPTY_ANNOTATIONS);
+        this(entity, variant, null);
     }
 
     private Entity(final T entity, final MediaType mediaType, Annotation[] annotations) {
@@ -219,7 +221,8 @@ public final class Entity<T> {
     private Entity(final T entity, final Variant variant, Annotation[] annotations) {
         this.entity = entity;
         this.variant = variant;
-        this.annotations = annotations;
+
+        this.annotations = (annotations == null) ? EMPTY_ANNOTATIONS : annotations;
     }
 
     /**
@@ -275,5 +278,36 @@ public final class Entity<T> {
      */
     public Annotation[] getAnnotations() {
         return annotations;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Entity)) return false;
+
+        Entity entity1 = (Entity) o;
+
+        if (!Arrays.equals(annotations, entity1.annotations)) return false;
+        if (entity != null ? !entity.equals(entity1.entity) : entity1.entity != null) return false;
+        if (variant != null ? !variant.equals(entity1.variant) : entity1.variant != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entity != null ? entity.hashCode() : 0;
+        result = 31 * result + (variant != null ? variant.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(annotations);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Entity{" +
+                "entity=" + entity +
+                ", variant=" + variant +
+                ", annotations=" + Arrays.toString(annotations) +
+                '}';
     }
 }

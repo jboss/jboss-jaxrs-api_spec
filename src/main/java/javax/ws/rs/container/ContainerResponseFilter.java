@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,6 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 package javax.ws.rs.container;
 
 import java.io.IOException;
@@ -78,8 +79,8 @@ public interface ContainerResponseFilter {
      * (either by a {@link ContainerRequestFilter request filter} or by a
      * matched resource method.
      * <p>
-     * Filters in the filter chain are ordered according to their priority
-     * (see {@link javax.annotation.Priority}).
+     * Filters in the filter chain are ordered according to their {@code javax.annotation.Priority}
+     * class-level annotation value.
      * </p>
      *
      * @param requestContext  request context.

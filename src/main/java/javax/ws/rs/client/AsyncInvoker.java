@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2011-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,6 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 package javax.ws.rs.client;
 
 import java.util.concurrent.Future;
@@ -65,7 +66,6 @@ public interface AsyncInvoker {
      * Note that in case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @return invocation response {@link Future future}.
      */
@@ -83,7 +83,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          response entity type.
      * @param responseType Java type the response entity will be converted to.
@@ -103,7 +102,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          generic response entity type.
      * @param responseType representation of a generic Java type the response
@@ -125,7 +123,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>      generic response entity type.
      * @param callback asynchronous invocation callback.
@@ -145,7 +142,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param entity request entity, including it's full {@link javax.ws.rs.core.Variant} information.
      *               Any variant-related HTTP headers previously set (namely {@code Content-Type},
@@ -167,7 +163,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          response entity type.
      * @param entity       request entity, including it's full {@link javax.ws.rs.core.Variant} information.
@@ -191,7 +186,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          generic response entity type.
      * @param entity       request entity, including it's full {@link javax.ws.rs.core.Variant} information.
@@ -217,7 +211,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>      generic response entity type.
      * @param entity   request entity, including it's full {@link javax.ws.rs.core.Variant} information.
@@ -241,7 +234,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param entity request entity, including it's full {@link javax.ws.rs.core.Variant} information.
      *               Any variant-related HTTP headers previously set (namely {@code Content-Type},
@@ -265,7 +257,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          response entity type.
      * @param entity       request entity, including it's full {@link javax.ws.rs.core.Variant} information.
@@ -289,7 +280,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          generic response entity type.
      * @param entity       request entity, including it's full {@link javax.ws.rs.core.Variant} information.
@@ -315,7 +305,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>      generic response entity type.
      * @param entity   request entity, including it's full {@link javax.ws.rs.core.Variant} information.
@@ -339,7 +328,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @return invocation response {@link Future future}.
      */
@@ -357,7 +345,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          response entity type.
      * @param responseType Java type the response entity will be converted to.
@@ -377,7 +364,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          generic response entity type.
      * @param responseType representation of a generic Java type the response
@@ -399,7 +385,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>      generic response entity type.
      * @param callback asynchronous invocation callback.
@@ -419,7 +404,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @return invocation response {@link Future future}.
      */
@@ -435,7 +419,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param callback asynchronous invocation callback.
      * @return invocation response {@link Future future}.
@@ -454,7 +437,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @return invocation response {@link Future future}.
      */
@@ -472,7 +454,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          response entity type.
      * @param responseType Java type the response entity will be converted to.
@@ -492,7 +473,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          generic response entity type.
      * @param responseType representation of a generic Java type the response
@@ -514,7 +494,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>      generic response entity type.
      * @param callback asynchronous invocation callback.
@@ -534,7 +513,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @return invocation response {@link Future future}.
      */
@@ -552,7 +530,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          response entity type.
      * @param responseType Java type the response entity will be converted to.
@@ -572,7 +549,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          generic response entity type.
      * @param responseType representation of a generic Java type the response
@@ -594,7 +570,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>      generic response entity type.
      * @param callback asynchronous invocation callback.
@@ -614,7 +589,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param name method name.
      * @return invocation response {@link Future future}.
@@ -633,7 +607,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          response entity type.
      * @param name         method name.
@@ -654,7 +627,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          generic response entity type.
      * @param name         method name.
@@ -677,7 +649,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>      generic response entity type.
      * @param name     method name.
@@ -696,7 +667,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param name   method name.
      * @param entity request entity, including it's full {@link javax.ws.rs.core.Variant} information.
@@ -719,7 +689,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          response entity type.
      * @param name         method name.
@@ -744,7 +713,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>          generic response entity type.
      * @param name         method name.
@@ -771,7 +739,6 @@ public interface AsyncInvoker {
      * In case a processing of a properly received response fails, the wrapped processing exception
      * will be of {@link ResponseProcessingException} type and will contain the {@link Response}
      * instance whose processing has failed.
-     * </p>
      *
      * @param <T>      generic response entity type.
      * @param name     method name.

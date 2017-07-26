@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,12 +37,13 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 package javax.ws.rs;
 
 /**
  * A collection of built-in priority constants for the JAX-RS components that are supposed to be
- * ordered based on their {@link javax.annotation.Priority priority} when used or applied
- * by JAX-RS runtime.
+ * ordered based on their {@code javax.annotation.Priority} class-level annotation value when used
+ * or applied by JAX-RS runtime.
  * <p>
  * For example, JAX-RS filters and interceptors are grouped in chains for each of the message
  * processing extension points: Pre, PreMatch, Post as well as ReadFrom and WriteTo.
@@ -84,6 +85,8 @@ public final class Priorities {
     public static final int ENTITY_CODER = 4000;
     /**
      * User-level filter/interceptor priority.
+     *
+     * This value is also used as a default priority for application-supplied providers.
      */
     public static final int USER = 5000;
 }

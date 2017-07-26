@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2010-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,6 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 package javax.ws.rs.core;
 
 import java.io.InputStream;
@@ -72,7 +73,7 @@ import javax.ws.rs.ext.RuntimeDelegate;
  * @see Response.ResponseBuilder
  * @since 1.0
  */
-public abstract class Response {
+public abstract class Response implements AutoCloseable {
 
     /**
      * Protected constructor, use one of the static methods to obtain a
@@ -106,7 +107,7 @@ public abstract class Response {
      * </p>
      *
      * @return the message entity or {@code null} if message does not contain an
-     *         entity body.
+     *         entity body (i.e. when {@link #hasEntity()} returns {@code false}).
      * @throws IllegalStateException if the entity was previously fully consumed
      *                               as an {@link InputStream input stream}, or
      *                               if the response has been {@link #close() closed}.
@@ -125,8 +126,7 @@ public abstract class Response {
      * without {@link #bufferEntity() buffering} the entity data prior consuming.
      * </p>
      * <p>
-     * If the message does not contain an entity body {@code null} is returned.
-     * A non-null message instance returned from this method will be cached for
+     * A message instance returned from this method will be cached for
      * subsequent retrievals via {@link #getEntity()}. Unless the supplied entity
      * type is an {@link java.io.InputStream input stream}, this method automatically
      * {@link #close() closes} the an unconsumed original response entity data stream
@@ -164,8 +164,7 @@ public abstract class Response {
      * without {@link #bufferEntity() buffering} the entity data prior consuming.
      * </p>
      * <p>
-     * If the message does not contain an entity body {@code null} is returned.
-     * A non-null message instance returned from this method will be cached for
+     * A message instance returned from this method will be cached for
      * subsequent retrievals via {@link #getEntity()}. Unless the supplied entity
      * type is an {@link java.io.InputStream input stream}, this method automatically
      * {@link #close() closes} the an unconsumed original response entity data stream
@@ -203,8 +202,7 @@ public abstract class Response {
      * without {@link #bufferEntity() buffering} the entity data prior consuming.
      * </p>
      * <p>
-     * If the message does not contain an entity body {@code null} is returned.
-     * A non-null message instance returned from this method will be cached for
+     * A message instance returned from this method will be cached for
      * subsequent retrievals via {@link #getEntity()}. Unless the supplied entity
      * type is an {@link java.io.InputStream input stream}, this method automatically
      * {@link #close() closes} the an unconsumed original response entity data stream
@@ -243,8 +241,7 @@ public abstract class Response {
      * without {@link #bufferEntity() buffering} the entity data prior consuming.
      * </p>
      * <p>
-     * If the message does not contain an entity body {@code null} is returned.
-     * A non-null message instance returned from this method will be cached for
+     * A message instance returned from this method will be cached for
      * subsequent retrievals via {@link #getEntity()}. Unless the supplied entity
      * type is an {@link java.io.InputStream input stream}, this method automatically
      * {@link #close() closes} the an unconsumed original response entity data stream
@@ -274,6 +271,15 @@ public abstract class Response {
     /**
      * Check if there is an entity available in the response. The method returns
      * {@code true} if the entity is present, returns {@code false} otherwise.
+     * <p>
+     * Note that the method may return {@code true} also for response messages with
+     * a zero-length content, in case the <tt>{@value javax.ws.rs.core.HttpHeaders#CONTENT_LENGTH}</tt> and
+     * <tt>{@value javax.ws.rs.core.HttpHeaders#CONTENT_TYPE}</tt> headers are specified in the message.
+     * In such case, an attempt to read the entity using one of the {@code readEntity(...)}
+     * methods will return a corresponding instance representing a zero-length entity for a
+     * given Java type or produce a {@link ProcessingException} in case no such instance
+     * is available for the Java type.
+     * </p>
      *
      * @return {@code true} if there is an entity present in the message,
      *         {@code false} otherwise.
@@ -346,6 +352,7 @@ public abstract class Response {
      * @throws ProcessingException if there is an error closing the response.
      * @since 2.0
      */
+    @Override
     public abstract void close();
 
     /**
@@ -606,6 +613,20 @@ public abstract class Response {
      */
     public static ResponseBuilder status(int status) {
         return ResponseBuilder.newInstance().status(status);
+    }
+
+    /**
+     * Create a new ResponseBuilder with the supplied status and reason phrase.
+     *
+     * @param status       the response status.
+     * @param reasonPhrase the reason phrase.
+     * @return the updated response builder.
+     * @throws IllegalArgumentException if status is less than {@code 100} or greater
+     *                                  than {@code 599}.
+     * @since 2.1
+     */
+    public static ResponseBuilder status(int status, String reasonPhrase) {
+        return ResponseBuilder.newInstance().status(status, reasonPhrase);
     }
 
     /**
@@ -876,6 +897,18 @@ public abstract class Response {
         /**
          * Set the status on the ResponseBuilder.
          *
+         * @param status       the response status.
+         * @param reasonPhrase the reason phrase.
+         * @return the updated response builder.
+         * @throws IllegalArgumentException if status is less than {@code 100} or greater
+         *                                  than {@code 599}.
+         * @since 2.1
+         */
+        public abstract ResponseBuilder status(int status, String reasonPhrase);
+
+        /**
+         * Set the status on the ResponseBuilder.
+         *
          * @param status the response status.
          * @return the updated response builder.
          * @throws IllegalArgumentException if status is {@code null}.
@@ -885,7 +918,7 @@ public abstract class Response {
             if (status == null) {
                 throw new IllegalArgumentException();
             }
-            return status(status.getStatusCode());
+            return status(status.getStatusCode(), status.getReasonPhrase());
         }
 
         /**
@@ -932,7 +965,9 @@ public abstract class Response {
          * methods.
          *
          * @param entity      the request entity.
-         * @param annotations annotations that will be passed to the {@link MessageBodyWriter}.
+         * @param annotations annotations that will be passed to the {@link MessageBodyWriter},
+         *                    (in addition to any annotations declared directly on a resource
+         *                    method that returns the built response).
          * @return updated response builder instance.
          * @see #entity(java.lang.Object)
          * @see #type(javax.ws.rs.core.MediaType)
@@ -1206,6 +1241,19 @@ public abstract class Response {
          * @return the reason phrase.
          */
         public String getReasonPhrase();
+
+        /**
+         * Get the this Status Type as a {@link Status}.
+         * <p>
+         * Please note that returned status contains only a status code, the reason phrase is
+         * set to default one (corresponding to the status code).
+         *
+         * @return {@link Status} representing this status type.
+         * @since 2.1
+         */
+        public default Status toEnum() {
+            return Status.fromStatusCode(getStatusCode());
+        }
     }
 
     /**
@@ -1363,6 +1411,24 @@ public abstract class Response {
          */
         EXPECTATION_FAILED(417, "Expectation Failed"),
         /**
+         * 428 Precondition required, see {@link <a href="https://tools.ietf.org/html/rfc6585#section-3">RFC 6585: Additional HTTP Status Codes</a>}.
+         *
+         * @since 2.1
+         */
+        PRECONDITION_REQUIRED(428, "Precondition Required"),
+        /**
+         * 429 Too Many Requests, see {@link <a href="https://tools.ietf.org/html/rfc6585#section-4">RFC 6585: Additional HTTP Status Codes</a>}.
+         *
+         * @since 2.1
+         */
+        TOO_MANY_REQUESTS(429, "Too Many Requests"),
+        /**
+         * 431 Request Header Fields Too Large, see {@link <a href="https://tools.ietf.org/html/rfc6585#section-5">RFC 6585: Additional HTTP Status Codes</a>}.
+         *
+         * @since 2.1
+         */
+        REQUEST_HEADER_FIELDS_TOO_LARGE(431, "Request Header Fields Too Large"),
+        /**
          * 500 Internal Server Error, see {@link <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">HTTP/1.1 documentation</a>}.
          */
         INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
@@ -1393,7 +1459,14 @@ public abstract class Response {
          *
          * @since 2.0
          */
-        HTTP_VERSION_NOT_SUPPORTED(505, "HTTP Version Not Supported");
+        HTTP_VERSION_NOT_SUPPORTED(505, "HTTP Version Not Supported"),
+        /**
+         * 511 Network Authentication Required, see {@link <a href="https://tools.ietf.org/html/rfc6585#section-6">RFC 6585: Additional HTTP Status Codes</a>}.
+         *
+         * @since 2.1
+         */
+        NETWORK_AUTHENTICATION_REQUIRED(511, "Network Authentication Required");
+
         private final int code;
         private final String reason;
         private final Family family;

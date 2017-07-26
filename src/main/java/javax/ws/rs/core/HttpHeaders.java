@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2010-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,6 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 package javax.ws.rs.core;
 
 import java.util.Date;
@@ -294,4 +295,11 @@ public interface HttpHeaders {
      * See {@link <a href="http://www.ietf.org/rfc/rfc2109.txt">IETF RFC 2109</a>}.
      */
     public static final String SET_COOKIE = "Set-Cookie";
+    /**
+     * {@code "Last-Event-ID"} HTTP request header name as defined by
+     * <a href="http://www.w3.org/TR/eventsource/#last-event-id">SSE specification</a>.
+     *
+     * @since 2.1
+     */
+    public static final String LAST_EVENT_ID_HEADER = "Last-Event-ID";
 }

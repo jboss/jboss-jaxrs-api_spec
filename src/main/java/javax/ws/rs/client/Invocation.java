@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2011-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,6 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 package javax.ws.rs.client;
 
 import java.util.Locale;
@@ -61,6 +62,7 @@ import javax.ws.rs.core.Response;
  * be executed (synchronously or asynchronously) and when.
  *
  * @author Marek Potociar
+ * @author Santiago Pericas-Geertsen
  * @see Invocation.Builder Invocation.Builder
  */
 public interface Invocation {
@@ -284,6 +286,31 @@ public interface Invocation {
          * @see Invocation#property(String, Object)
          */
         public Builder property(String name, Object value);
+
+        /**
+         * Access the default reactive invoker based on {@link java.util.concurrent.CompletionStage}.
+         *
+         * @return default reactive invoker instance.
+         * @since 2.1
+         * @see javax.ws.rs.client.Invocation.Builder#rx(Class)
+         */
+        public CompletionStageRxInvoker rx();
+
+        /**
+         * Access a reactive invoker based on a {@link RxInvoker} subclass provider. Note
+         * that corresponding {@link RxInvokerProvider} must be registered in the client runtime.
+         * <p>
+         * This method is an extension point for JAX-RS implementations to support other types
+         * representing asynchronous computations.
+         *
+         * @param clazz {@link RxInvoker} subclass.
+         * @return reactive invoker instance.
+         * @throws IllegalStateException when provider for given class is not registered.
+         * @see javax.ws.rs.client.Client#register(Class)
+         * @since 2.1
+         */
+        public <T extends RxInvoker> T rx(Class<T> clazz);
+
     }
 
     /**
@@ -332,7 +359,8 @@ public interface Invocation {
      * @throws WebApplicationException     in case the response status code of the response
      *                                     returned by the server is not
      *                                     {@link javax.ws.rs.core.Response.Status.Family#SUCCESSFUL
-     *                                     successful}.
+     *                                     successful} and the specified response type is not
+     *                                     {@link javax.ws.rs.core.Response}.
      */
     public <T> T invoke(Class<T> responseType);
 

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2011-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,13 +37,20 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 package javax.ws.rs.client;
 
 import java.net.URL;
 import java.security.KeyStore;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.Configurable;
 import javax.ws.rs.core.Configuration;
+import javax.ws.rs.sse.SseEventSource;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -85,7 +92,7 @@ public abstract class ClientBuilder implements Configurable<ClientBuilder> {
         try {
             Object delegate =
                     FactoryFinder.find(JAXRS_DEFAULT_CLIENT_BUILDER_PROPERTY,
-                            JAXRS_DEFAULT_CLIENT_BUILDER);
+                            JAXRS_DEFAULT_CLIENT_BUILDER, ClientBuilder.class);
             if (!(delegate instanceof ClientBuilder)) {
                 Class pClass = ClientBuilder.class;
                 String classnameAsResource = pClass.getName().replace('.', '/') + ".class";
@@ -235,6 +242,69 @@ public abstract class ClientBuilder implements Configurable<ClientBuilder> {
      * @return an updated client builder instance.
      */
     public abstract ClientBuilder hostnameVerifier(final HostnameVerifier verifier);
+
+    /**
+     * Set the client-side {@link ExecutorService}.
+     * <p>
+     * Provided executor service will be used for executing asynchronous tasks.
+     * <p>
+     * When running in a Java EE container, implementations are required to use the container-managed
+     * executor service by default.  In Java SE, the default is implementation-specific.  In either
+     * case, calling this method will override the default.
+     *
+     * @param executorService executor service to be used for async invocations.
+     * @return an updated client builder instance.
+     * @see Invocation.Builder#async()
+     * @see Invocation.Builder#rx()
+     * @see RxInvokerProvider#getRxInvoker(SyncInvoker, ExecutorService)
+     * @since 2.1
+     */
+    public abstract ClientBuilder executorService(final ExecutorService executorService);
+
+    /**
+     * Set the client-side {@link ScheduledExecutorService}.
+     * <p>
+     * Provided executor service will be used for executing scheduled asynchronous tasks.
+     * <p>
+     * When running in a Java EE container, implementations are required to use the container-managed
+     * scheduled executor service by default.  In Java SE the default is implementation-specific.  In 
+     * either case, calling this method will override the default.
+     *
+     * @param scheduledExecutorService executor service to be used for scheduled async invocations.
+     * @return an updated client builder instance.
+     * @see SseEventSource.Builder#reconnectingEvery(long, TimeUnit)
+     * @since 2.1
+     */
+    public abstract ClientBuilder scheduledExecutorService(final ScheduledExecutorService scheduledExecutorService);
+
+    /**
+     * Set the connect timeout.
+     * <p>
+     * Value {@code 0} represents infinity. Negative values are not allowed.
+     *
+     * @param timeout the maximum time to wait.
+     * @param unit    the time unit of the timeout argument.
+     * @return an updated client builder instance.
+     * @throws IllegalArgumentException when the value is negative.
+     * @since 2.1
+     */
+    public abstract ClientBuilder connectTimeout(long timeout, TimeUnit unit);
+
+    /**
+     * Set the read timeout.
+     * <p>
+     * The value is the timeout to read a response. If the server doesn't respond within the defined timeframe,
+     * {@link ProcessingException} is thrown with {@link TimeoutException} as a cause.
+     * <p>
+     * Value {@code 0} represents infinity. Negative values are not allowed.
+     *
+     * @param timeout the maximum time to wait.
+     * @param unit    the time unit of the timeout argument.
+     * @return an updated client builder instance.
+     * @throws IllegalArgumentException when the value is negative.
+     * @since 2.1
+     */
+    public abstract ClientBuilder readTimeout(long timeout, TimeUnit unit);
 
     /**
      * Build a new client instance using all the configuration previously specified

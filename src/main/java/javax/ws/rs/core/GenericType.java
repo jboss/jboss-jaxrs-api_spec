@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2010-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,6 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 package javax.ws.rs.core;
 
 import java.lang.reflect.Array;
@@ -103,6 +104,29 @@ public class GenericType<T> {
      * The actual raw parameter type.
      */
     private final Class<?> rawType;
+
+    /**
+     * Create a {@link javax.ws.rs.core.GenericType generic type} from a
+     * Java {@code instance}.
+     * <p>
+     * If the supplied instance is a {@link javax.ws.rs.core.GenericEntity}, the generic type
+     * will be computed using the {@link javax.ws.rs.core.GenericEntity#getType()}.
+     * Otherwise {@code instance.getClass()} will be used.
+     * </p>
+     *
+     * @param instance Java instance for which the {@code GenericType} description should be created.
+     * @return {@code GenericType} describing the Java {@code instance}.
+     * @since 2.1
+     */
+    public static GenericType forInstance(final Object instance) {
+        final GenericType genericType;
+        if (instance instanceof GenericEntity) {
+            genericType = new GenericType(((GenericEntity) instance).getType());
+        } else {
+            genericType = (instance == null) ? null : new GenericType(instance.getClass());
+        }
+        return genericType;
+    }
 
     /**
      * Constructs a new generic type, deriving the generic type and class from

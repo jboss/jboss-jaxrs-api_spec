@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2010-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,6 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+
 package javax.ws.rs;
 
 import javax.ws.rs.core.Response;
@@ -59,14 +60,15 @@ public class WebApplicationException extends RuntimeException {
     private final Response response;
 
     /**
-     * Construct a new instance with a blank message and default HTTP status code of 500.
+     * Construct a new instance with a default HTTP status code of 500
+     * and a default message generated from the HTTP status code and the associated HTTP status reason phrase.
      */
     public WebApplicationException() {
         this((Throwable) null, Response.Status.INTERNAL_SERVER_ERROR);
     }
 
     /**
-     * Construct a new instance with a blank message and default HTTP status code of 500.
+     * Construct a new instance with the supplied message and a default HTTP status code of 500.
      *
      * @param message the detail message (which is saved for later retrieval
      *                by the {@link #getMessage()} method).
@@ -78,7 +80,8 @@ public class WebApplicationException extends RuntimeException {
 
 
     /**
-     * Construct a new instance using the supplied response.
+     * Construct a new instance using the supplied response
+     * and a default message generated from the response's HTTP status code and the associated HTTP status reason phrase.
      *
      * @param response the response that will be returned to the client, a value
      *                 of null will be replaced with an internal server error response (status
@@ -89,7 +92,7 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance using the supplied response.
+     * Construct a new instance using the supplied message and response.
      *
      * @param message  the detail message (which is saved for later retrieval
      *                 by the {@link #getMessage()} method).
@@ -103,7 +106,8 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance with a blank message and specified HTTP status code.
+     * Construct a new instance with the supplied HTTP status code
+     * and a default message generated from the HTTP status code and the associated HTTP status reason phrase.
      *
      * @param status the HTTP status code that will be returned to the client.
      */
@@ -112,7 +116,7 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance with a blank message and specified HTTP status code.
+     * Construct a new instance with a supplied message and HTTP status code.
      *
      * @param message the detail message (which is saved for later retrieval
      *                by the {@link #getMessage()} method).
@@ -124,7 +128,8 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance with a blank message and specified HTTP status code.
+     * Construct a new instance with the supplied HTTP status
+     * and a default message generated from the HTTP status code and the associated HTTP status reason phrase.
      *
      * @param status the HTTP status code that will be returned to the client.
      * @throws IllegalArgumentException if status is {@code null}.
@@ -134,7 +139,7 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance with a blank message and specified HTTP status code.
+     * Construct a new instance with the supplied message and HTTP status.
      *
      * @param message the detail message (which is saved for later retrieval
      *                by the {@link #getMessage()} method).
@@ -147,7 +152,8 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance with a blank message and default HTTP status code of 500.
+     * Construct a new instance with the supplied root cause, default HTTP status code of 500
+     * and a default message generated from the HTTP status code and the associated HTTP status reason phrase.
      *
      * @param cause the underlying cause of the exception.
      */
@@ -156,7 +162,7 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance with a blank message and default HTTP status code of 500.
+     * Construct a new instance with the supplied message, root cause and default HTTP status code of 500.
      *
      * @param message the detail message (which is saved for later retrieval
      *                by the {@link #getMessage()} method).
@@ -168,7 +174,8 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance using the supplied response.
+     * Construct a new instance with the supplied root cause, response
+     * and a default message generated from the response's HTTP status code and the associated HTTP status reason phrase.
      *
      * @param response the response that will be returned to the client,
      *                 a value of null will be replaced with an internal server error
@@ -180,7 +187,7 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance using the supplied response.
+     * Construct a new instance with the supplied message, root cause and response.
      *
      * @param message  the detail message (which is saved for later retrieval
      *                 by the {@link #getMessage()} method).
@@ -210,7 +217,8 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance with a blank message and specified HTTP status code.
+     * Construct a new instance with the supplied root cause, HTTP status code
+     * and a default message generated from the HTTP status code and the associated HTTP status reason phrase.
      *
      * @param status the HTTP status code that will be returned to the client.
      * @param cause  the underlying cause of the exception.
@@ -220,7 +228,7 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance with a blank message and specified HTTP status code.
+     * Construct a new instance with the supplied message, root cause and HTTP status code.
      *
      * @param message the detail message (which is saved for later retrieval
      *                by the {@link #getMessage()} method).
@@ -233,7 +241,8 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance with a blank message and specified HTTP status code.
+     * Construct a new instance with the supplied root cause, HTTP status code
+     * and a default message generated from the HTTP status code and the associated HTTP status reason phrase.
      *
      * @param status the HTTP status code that will be returned to the client.
      * @param cause  the underlying cause of the exception.
@@ -245,7 +254,7 @@ public class WebApplicationException extends RuntimeException {
     }
 
     /**
-     * Construct a new instance with a blank message and specified HTTP status code.
+     * Construct a new instance with a the supplied message, root cause and HTTP status code.
      *
      * @param message the detail message (which is saved for later retrieval
      *                by the {@link #getMessage()} method).
