@@ -44,7 +44,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
@@ -250,9 +249,23 @@ final class FactoryFinder {
                    throw pae.getException();
                }
            }
+
            Object moduleIdentifier = moduleIdentifierClass.getMethod("create", String.class).invoke(null, RESTEASY_JAXRS_API_MODULE);
            Object module = moduleLoaderClass.getMethod("loadModule", moduleIdentifierClass).invoke(moduleLoader, moduleIdentifier);
-           return (ClassLoader)moduleClass.getMethod("getClassLoader").invoke(module);
+
+           if (sm == null) {
+               return (ClassLoader)moduleClass.getMethod("getClassLoader").invoke(module);
+           }
+           try {
+               return AccessController.doPrivileged(new PrivilegedExceptionAction<ClassLoader>() {
+                   @Override
+                   public ClassLoader run() throws Exception {
+                       return (ClassLoader) moduleClass.getMethod("getClassLoader").invoke(module);
+                   }
+               });
+           } catch (PrivilegedActionException pae) {
+               throw pae.getException();
+           }
         } catch (ClassNotFoundException e) {
            //ignore, JBoss Modules might not be available at all
             return null;
