@@ -250,8 +250,14 @@ final class FactoryFinder {
                }
            }
 
-           Object moduleIdentifier = moduleIdentifierClass.getMethod("create", String.class).invoke(null, RESTEASY_JAXRS_API_MODULE);
-           Object module = moduleLoaderClass.getMethod("loadModule", moduleIdentifierClass).invoke(moduleLoader, moduleIdentifier);
+           Object module;
+           try {
+               Object moduleIdentifier = moduleIdentifierClass.getMethod("create", String.class).invoke(null, RESTEASY_JAXRS_API_MODULE);
+               module = moduleLoaderClass.getMethod("loadModule", moduleIdentifierClass).invoke(moduleLoader, moduleIdentifier);
+           } catch (Exception e) {
+               //ignore, module not found
+               return null;
+           }
 
            if (sm == null) {
                return (ClassLoader)moduleClass.getMethod("getClassLoader").invoke(module);
