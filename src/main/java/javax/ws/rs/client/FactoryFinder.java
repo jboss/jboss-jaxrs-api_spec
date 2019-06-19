@@ -127,6 +127,26 @@ final class FactoryFinder {
         }
     }
 
+    private static <T> Object loadService(Class<T> service, ClassLoader cl)
+    {
+        return AccessController.doPrivileged(new PrivilegedAction<Object>()
+        {
+            @Override
+            public Object run()
+            {
+               Iterator<T> iterator = ServiceLoader.load(service, cl).iterator();
+               if (iterator.hasNext())
+               {
+                  return iterator.next();
+               }
+               else
+               {
+                  return null;
+               }
+            }
+        });
+    }
+
     /**
      * Finds the implementation {@code Class} for the given factory name,
      * or if that fails, finds the {@code Class} for the given fallback
@@ -152,21 +172,19 @@ final class FactoryFinder {
         ClassLoader classLoader = getContextClassLoader();
 
         try {
-            Iterator<T> iterator = ServiceLoader.load(service, FactoryFinder.getContextClassLoader()).iterator();
-
-            if(iterator.hasNext()) {
-                return iterator.next();
+            Object res = loadService(service, classLoader);
+            if (res != null) {
+               return res;
             }
         } catch (Exception | ServiceConfigurationError ex) {
             LOGGER.log(Level.FINER, "Failed to load service " + factoryId + ".", ex);
         }
 
         try {
-            Iterator<T> iterator = ServiceLoader.load(service, FactoryFinder.class.getClassLoader()).iterator();
-
-            if(iterator.hasNext()) {
-                return iterator.next();
-            }
+           Object res = loadService(service, FactoryFinder.class.getClassLoader());
+           if (res != null) {
+              return res;
+           }
         } catch (Exception | ServiceConfigurationError ex) {
             LOGGER.log(Level.FINER, "Failed to load service " + factoryId + ".", ex);
         }
