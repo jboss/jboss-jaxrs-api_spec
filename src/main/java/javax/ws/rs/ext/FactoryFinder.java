@@ -130,22 +130,35 @@ final class FactoryFinder {
 
     private static <T> Object loadService(Class<T> service, ClassLoader cl)
     {
-        return AccessController.doPrivileged(new PrivilegedAction<Object>()
-        {
-            @Override
-            public Object run()
-            {
-               Iterator<T> iterator = ServiceLoader.load(service, cl).iterator();
-               if (iterator.hasNext())
+        final SecurityManager sm = System.getSecurityManager();
+        if (sm == null) {
+           Iterator<T> iterator = ServiceLoader.load(service, cl).iterator();
+           if (iterator.hasNext())
+           {
+              return iterator.next();
+           }
+           else
+           {
+              return null;
+           }
+        } else {
+           return AccessController.doPrivileged(new PrivilegedAction<Object>()
+           {
+               @Override
+               public Object run()
                {
-                  return iterator.next();
+                  Iterator<T> iterator = ServiceLoader.load(service, cl).iterator();
+                  if (iterator.hasNext())
+                  {
+                     return iterator.next();
+                  }
+                  else
+                  {
+                     return null;
+                  }
                }
-               else
-               {
-                  return null;
-               }
-            }
-        });
+           });
+        }
     }
 
     /**
